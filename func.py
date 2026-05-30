@@ -1697,7 +1697,7 @@ async def generate_quiz_html(quiz, chat_id, context, ParseMode, type):
         await context.bot.send_document(
             chat_id=chat_id,
             document=file,
-            caption=f"📝 {quiz['quiz_name']} \n\n<b><i>Powered by Team SPY</i></b>",
+            caption=f"📝 {quiz['quiz_name']} \n\n<b><i>Powered by Team ALPHA</i></b>",
             parse_mode=ParseMode.HTML
         )
 
