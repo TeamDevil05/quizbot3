@@ -292,27 +292,40 @@ def _render_question(pdf: QuizReportPDF,
     y += 1
 
     # ── Options ───────────────────────────────────────────────────────────
-    opts = [_strip_html(o) for o in (q.get("options") or [])]
-    correct_id = q.get("correct_option_id")
-
     for i, opt in enumerate(opts):
-        letter = OPTION_LETTERS[i] if i < len(OPTION_LETTERS) else str(i + 1)
-        is_correct = (i == correct_id)
+    letter = OPTION_LETTERS[i] if i < len(OPTION_LETTERS) else str(i + 1)
+    is_correct = (i == correct_id)
 
-        if is_correct:
-            pdf.set_fill_color(220, 245, 220)   # light green background
-            pdf.set_text_color(0, 110, 0)        # dark green text
-            pdf.set_font("Noto", "B", 9)
-        else:
-            pdf.set_fill_color(255, 255, 255)
-            pdf.set_text_color(50, 50, 50)
-            pdf.set_font("Noto", "", 9)
+    if is_correct:
+        pdf.set_fill_color(220, 245, 220)
+        pdf.set_text_color(0, 110, 0)
+        pdf.set_font("Noto", "B", 9)
+    else:
+        pdf.set_fill_color(255, 255, 255)
+        pdf.set_text_color(50, 50, 50)
+        pdf.set_font("Noto", "", 9)
 
-        # Render letter + option text together; pin left margin to option x
-        # so wrapped lines don't bleed into the opposite column.
-        y = _multi_cell_in_col(pdf, x0 + 2, y, col_w - 2, 5.5,
-                                f"{letter}) {opt or ''}", fill=is_correct)
+    opt_text = str(opt or "").strip()
 
+    opt_h = 5.5 * max(1, _line_count(opt_text, col_w - 10))
+
+    if is_correct:
+        pdf.rect(x0 + 2, y, col_w - 2, opt_h, style="F")
+
+    pdf.set_xy(x0 + 2, y)
+    pdf.set_font("Noto", "B", 9)
+    pdf.cell(8, 5.5, f"{letter})", border=0)
+
+    pdf.set_font("Noto", "B" if is_correct else "", 9)
+    y = _multi_cell_in_col(
+        pdf,
+        x0 + 10,
+        y,
+        col_w - 10,
+        5.5,
+        opt_text,
+        fill=False
+    )
     # reset colors
     pdf.set_fill_color(255, 255, 255)
     pdf.set_text_color(0, 0, 0)
