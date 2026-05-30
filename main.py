@@ -1767,7 +1767,7 @@ async def stats_quiz(client, message):
         f"📚 **Total Quizzes Created:** `{total_quizzes}`\n"
         f"💰 **Paid Quizzes:** `{paid_quizzes}`\n"
         f"🎉 **Free Quizzes:** `{free_quizzes}`\n\n"
-        f"**__Powered by Team SPY__**"
+        f"**__Powered by Team ALPHA__**"
     )
     
 
